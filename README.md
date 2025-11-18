@@ -245,6 +245,40 @@ model.jit_fusion = tcnn.supports_jit_fusion() # Optional: accelerate with JIT fu
 
 See `samples/mlp_learning_an_image_pytorch.py` for an example.
 
+## sklearn-style Python package
+
+To make `tiny-cuda-nn` available through a familiar [scikit-learn](https://scikit-learn.org/stable/) interface, the repository also ships a lightweight pure-Python package that exposes an `MLPClassifier` API. Install it directly from this repository:
+
+```sh
+# install from GitHub
+pip install git+https://github.com/NVlabs/tiny-cuda-nn/#subdirectory=bindings/sklearn
+
+# or from a local checkout
+tiny-cuda-nn$ pip install ./bindings/sklearn
+```
+
+Once installed you can use it just like the scikit-learn counterpart:
+
+```python
+import numpy as np
+from tinycudann_sklearn import MLPClassifier
+
+X = np.random.randn(1024, 8).astype(np.float32)
+y = np.random.randint(0, 4, size=1024)
+
+clf = MLPClassifier(
+	hidden_layer_sizes=(64, 64, 64),
+	max_iter=50,
+	learning_rate_init=1e-2,
+	random_state=0,
+	early_stopping=True,
+)
+clf.fit(X, y)
+print("accuracy:", clf.score(X, y))
+```
+
+Additional, fully reproducible demonstrations can be found under `bindings/sklearn/notebooks`. Each notebook trains and evaluates the classifier on a well-known dataset (Iris, Wine, and Digits) and can be executed via Jupyter or `jupyter nbconvert --execute`.
+
 
 
 ## Components
